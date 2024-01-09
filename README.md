@@ -140,3 +140,38 @@ public class Application2 {
         </plugin>
     </plugins>
 </build>
+
+
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+
+public class JsonToFileAndBase64OptimizedExample {
+
+    public static void main(String[] args) {
+        // Chuỗi JSON để lưu vào tệp
+        String jsonContent = "{\"name\": \"John\", \"age\": 30, \"city\": \"New York\"}";
+
+        // Lưu chuỗi JSON vào tệp và trả về dưới dạng chuỗi Base64
+        String base64Data = writeJsonToFileAndGetBase64(jsonContent);
+        System.out.println("Base64 Encoded: " + base64Data);
+    }
+
+    private static String writeJsonToFileAndGetBase64(String jsonContent) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             Base64OutputStream base64OutputStream = new Base64OutputStream(byteArrayOutputStream, true)) {
+
+            // Sử dụng ObjectMapper để ghi chuỗi JSON vào Base64OutputStream
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(base64OutputStream, jsonContent);
+
+            // Lấy dữ liệu từ ByteArrayOutputStream
+            byte[] base64DataBytes = byteArrayOutputStream.toByteArray();
+            return new String(base64DataBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+}
